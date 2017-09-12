@@ -9,15 +9,11 @@ pinMode(coolerout,OUTPUT);
 
 void loop() {
  int temp=analogRead(tempsen);
-if(temp>=501){
-  digitalWrite(coolerout,LOW);
-        Serial.println(temp);
-                Serial.println("LOW");
-
-
+if(temp<=500){
+  digitalWrite(coolerout,HIGH);
   }
-  else if (temp<=500){
-    digitalWrite(coolerout,HIGH);
-      Serial.println(temp);
-                      Serial.println("HIGH");}
+  else{
+      digitalWrite(coolerout,LOW);
+    }
+    Serial.println(temp);
 }
