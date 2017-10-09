@@ -1,0 +1,16 @@
+﻿<Properties StartupConfiguration="{DC69EF55-C30B-45A4-85AF-D85F85394D6C}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Chapter2App/Program.cs">
+    <Files>
+      <File FileName="csharotraining/Program.cs" Line="8" Column="13" />
+      <File FileName="Chapter2App/Program.cs" Line="10" Column="14" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.csharotraining PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.ItemProperties.Chapter2App PreferredExecutionTarget="MonoDevelop.Default" />
+</Properties>
