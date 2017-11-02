@@ -1,8 +1,6 @@
 //KY019 5V relay module
 const int relay = 8; // relay turns trigger signal - active high;
-const int water= A5;
-int repeat;
-int count=0;
+const int water= A4;
 void setup ()
 {
   Serial.begin(9600);
@@ -13,11 +11,10 @@ void setup ()
 void loop ()
 {
 int waterread=analogRead(water);
-  if(waterread>200){
+  if(waterread>=1010){
   digitalWrite (relay, LOW); // relay off;
     Serial.print("water read: ");
        Serial.println(waterread);
-       delay(5000);
   }
   else{
   digitalWrite (relay, HIGH); // relay  is turned on;
