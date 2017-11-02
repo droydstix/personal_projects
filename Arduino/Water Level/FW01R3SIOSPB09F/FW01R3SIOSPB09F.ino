@@ -11,10 +11,11 @@ void setup ()
 void loop ()
 {
 int waterread=analogRead(water);
-  if(waterread>=1010){
+  if(waterread==1023){
   digitalWrite (relay, LOW); // relay off;
     Serial.print("water read: ");
        Serial.println(waterread);
+       delay(8000);
   }
   else{
   digitalWrite (relay, HIGH); // relay  is turned on;
