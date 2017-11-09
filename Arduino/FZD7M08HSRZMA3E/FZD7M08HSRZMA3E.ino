@@ -27,7 +27,7 @@ void loop(){
   digitalWrite(resetPin, LOW);
   for (int i=0;i<7;i++){
     digitalWrite(strobePin, LOW);
-    delay(2);
+    delay(1);
     spectrumValue[i]=analogRead(analogPin);
     spectrumValue[i]=constrain(spectrumValue[i], filter, 1023);
     spectrumValue[i]=map(spectrumValue[i], filter,1023,0,255);
@@ -38,9 +38,12 @@ void loop(){
   Serial.println();
   analogWrite(ledred,spectrumValue[0]);
   analogWrite(ledred,spectrumValue[1]);
-  analogWrite(ledblue,spectrumValue[5]);
-  analogWrite(ledblue,spectrumValue[6]);
+  analogWrite(ledred,spectrumValue[2]);
+  analogWrite(ledgreen,spectrumValue[2]);
   analogWrite(ledgreen,spectrumValue[3]);
   analogWrite(ledgreen,spectrumValue[4]);
+  analogWrite(ledblue,spectrumValue[4]);
+  analogWrite(ledblue,spectrumValue[5]);
+  analogWrite(ledblue,spectrumValue[6]);
 }
 
