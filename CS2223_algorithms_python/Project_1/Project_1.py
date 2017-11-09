@@ -1,3 +1,5 @@
+## GCD Project 1
+## Guillermo Rivera
 import time
 #from memory_profiler import memory_usage 
 #from memory_profiler import profile
@@ -5,12 +7,14 @@ import time
 #print(process.memory_info().rss)
 # downloaded these for memory but at initialiazing received "from memory_profiler import memory_usage
 # ModuleNotFoundError: No module named 'memory_profiler"
+
 i=0
 
-# Get User Input
-firstin= int(input("Enter the first digit: "))
-secondin= int(input("Enter the second digit: "))
+print("Welcome to Guillermo's GCD program")
+print("Please follow the on screen Instructions")
 print(" ")
+
+
 
 
 # Find GCD with Euclid Algorithm
@@ -74,7 +78,7 @@ def effGDCeuc(m,n):
         valgcd=Euclid(m,n)
         elapsed = (time.clock()-start)
         print("The Euclid method took a time of "+str(elapsed))
-        print("The GDC for Euclid is "+str(valgcd))
+        print("The GCD for Euclid is "+str(valgcd))
         print(" ")
 
 #Efficiency for CIC
@@ -83,7 +87,7 @@ def effGDCcic(m,n):
         valgcd=CIC(m,n)
         elapsed = (time.clock()-start)
         print("The CIC method took a time of "+str(elapsed))
-        print("The GDC for CIC is "+str(valgcd))
+        print("The GCD for CIC is "+str(valgcd))
         print(" ")
 
 #efficiency for MSP
@@ -92,7 +96,7 @@ def effGDCmsp(m,n):
         valgcd=MSP(m,n)
         elapsed = (time.clock()-start)
         print("The MSP method took a time of "+str(elapsed))
-        print("The GDC for MSP is "+str(valgcd))
+        print("The GCD for MSP is "+str(valgcd))
         print("")
 
 def effall(firstin,secondin):
@@ -107,7 +111,11 @@ def effall(firstin,secondin):
 
 
 while(True):
-
+# Get Input
+        if(i==0):
+                firstin= int(input("Enter the first digit: "))
+                secondin= int(input("Enter the second digit: "))
+                print(" ")
         if(i == 2):
                 print("Too many incorrect tries, exiting...")
                 exit()
@@ -123,14 +131,6 @@ while(True):
         if(firstin>0 and secondin>0):
                 i = 0
                 effall(firstin,secondin)
-                again=str(input("Test again?(y/n): "))
-                if(again=='n'):
-                    print('goodbye')
-                    exit()
-                else:
-                    firstin= int(input("Enter the first digit: "))
-                    secondin= int(input("Enter the second digit: "))
-
         continue
 
     
