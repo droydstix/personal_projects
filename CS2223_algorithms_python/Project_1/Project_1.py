@@ -73,27 +73,27 @@ def MSP(m,n):
     return final
 
 #Efficiency for EUCLID
-def effGDCeuc(m,n):
+def effGDCeuc(s1,s2):
         start = time.clock()
-        valgcd=Euclid(m,n)
+        valgcd=Euclid(s1,s2)
         elapsed = (time.clock()-start)
         print("The Euclid method took a time of "+str(elapsed))
         print("The GCD for Euclid is "+str(valgcd))
         print(" ")
 
 #Efficiency for CIC
-def effGDCcic(m,n):
+def effGDCcic(s1,s2):
         start = time.clock()
-        valgcd=CIC(m,n)
+        valgcd=CIC(s1,s2)
         elapsed = (time.clock()-start)
         print("The CIC method took a time of "+str(elapsed))
         print("The GCD for CIC is "+str(valgcd))
         print(" ")
 
 #efficiency for MSP
-def effGDCmsp(m,n):
+def effGDCmsp(s1,s2):
         start = time.clock()
-        valgcd=MSP(m,n)
+        valgcd=MSP(s1,s2)
         elapsed = (time.clock()-start)
         print("The MSP method took a time of "+str(elapsed))
         print("The GCD for MSP is "+str(valgcd))
