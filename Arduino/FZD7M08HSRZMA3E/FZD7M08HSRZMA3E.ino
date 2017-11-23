@@ -1,49 +1,71 @@
+ 
+/* Stepper Unipolar Advanced
+ * -------------------------
+ *
+ * Program to drive a stepper motor coming from a 5'25 disk drive
+ * according to the documentation I found, this stepper: "[...] motor 
+ * made by Copal Electronics, with 1.8 degrees per step and 96 ohms 
+ * per winding, with center taps brought out to separate leads [...]"
+ * [http://www.cs.uiowa.edu/~jones/step/example.html]
+ *
+ * It is a unipolar stepper motor with 5 wires:
+ * 
+ * - red: power connector, I have it at 5V and works fine
+ * - orange and black: coil 1
+ * - brown and yellow: coil 2
+ *
+ * (cleft) 2005 DojoDave for K3
+ * http://www.0j0.org | http://arduino.berlios.de
+ *
+ * @author: David Cuartielles
+ * @date: 20 Oct. 2005
+ */
 
-int analogPin=0;
-int strobePin=2;
-int resetPin=3;
-int ledred=9;
-int ledblue=10;
-int ledgreen=11;
-int spectrumValue[7];
-int filter=190;
+int motorPins[] = {5, 4, 3, 2};
+int count = 0;
+int count2 = 0;
+int delayTime = 10;
+int val = 0;
 
-void setup(){
-  
-  Serial.begin(9600);
-  pinMode(analogPin, INPUT);
-  pinMode(strobePin, OUTPUT);
-  pinMode(resetPin, OUTPUT);
-  pinMode(ledred, OUTPUT);
-  pinMode(ledblue, OUTPUT);
-  pinMode(ledgreen, OUTPUT);
-  digitalWrite(resetPin, LOW);
-  digitalWrite(strobePin, HIGH);
-}
-
-void loop(){
-  
-  digitalWrite(resetPin, HIGH);
-  digitalWrite(resetPin, LOW);
-  for (int i=0;i<7;i++){
-    digitalWrite(strobePin, LOW);
-    delay(1);
-    spectrumValue[i]=analogRead(analogPin);
-    spectrumValue[i]=constrain(spectrumValue[i], filter, 1023);
-    spectrumValue[i]=map(spectrumValue[i], filter,1023,0,255);
-    Serial.print(spectrumValue[i]);
-    Serial.print(" ");
-    digitalWrite(strobePin, HIGH);
+void setup() {
+  for (count = 0; count < 4; count++) {
+    pinMode(motorPins[count], OUTPUT);
   }
-  Serial.println();
-  analogWrite(ledred,spectrumValue[0]);
-  analogWrite(ledred,spectrumValue[1]);
-  analogWrite(ledred,spectrumValue[2]);
-  analogWrite(ledgreen,spectrumValue[2]);
-  analogWrite(ledgreen,spectrumValue[3]);
-  analogWrite(ledgreen,spectrumValue[4]);
-  analogWrite(ledblue,spectrumValue[4]);
-  analogWrite(ledblue,spectrumValue[5]);
-  analogWrite(ledblue,spectrumValue[6]);
 }
 
+void moveForward() {
+  if ((count2 == 0) || (count2 == 1)) {
+    count2 = 16;
+  }
+  count2>>=1;
+  for (count = 3; count >= 0; count--) {
+    digitalWrite(motorPins[count], count2>>count&0x01);
+  }
+  delay(delayTime);
+}
+
+void moveBackward() {
+  if ((count2 == 0) || (count2 == 1)) {
+    count2 = 16;
+  }
+  count2>>=1;
+  for (count = 3; count >= 0; count--) {
+    digitalWrite(motorPins[3 - count], count2>>count&0x01);
+  }
+  delay(delayTime);
+}
+
+void loop() {
+  val = analogRead(0);
+  if (val > 540) {
+    // move faster the higher the value from the potentiometer
+    delayTime = 2048 - 1024 * val / 512 + 1; 
+    moveForward();
+  } else if (val < 480) {
+    // move faster the lower the value from the potentiometer
+    delayTime = 1024 * val / 512 + 1; 
+    moveBackward();
+  } else {
+    delayTime = 1024;
+  }
+}
