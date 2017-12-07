@@ -1,71 +1,46 @@
  
-/* Stepper Unipolar Advanced
- * -------------------------
- *
- * Program to drive a stepper motor coming from a 5'25 disk drive
- * according to the documentation I found, this stepper: "[...] motor 
- * made by Copal Electronics, with 1.8 degrees per step and 96 ohms 
- * per winding, with center taps brought out to separate leads [...]"
- * [http://www.cs.uiowa.edu/~jones/step/example.html]
- *
- * It is a unipolar stepper motor with 5 wires:
- * 
- * - red: power connector, I have it at 5V and works fine
- * - orange and black: coil 1
- * - brown and yellow: coil 2
- *
- * (cleft) 2005 DojoDave for K3
- * http://www.0j0.org | http://arduino.berlios.de
- *
- * @author: David Cuartielles
- * @date: 20 Oct. 2005
+/*
+ Stepper Motor Control - speed control
+
+ This program drives a unipolar or bipolar stepper motor.
+ The motor is attached to digital pins 8 - 11 of the Arduino.
+ A potentiometer is connected to analog input 0.
+
+ The motor will rotate in a clockwise direction. The higher the potentiometer value,
+ the faster the motor speed. Because setSpeed() sets the delay between steps,
+ you may notice the motor is less responsive to changes in the sensor value at
+ low speeds.
+
+ Created 30 Nov. 2009
+ Modified 28 Oct 2010
+ by Tom Igoe
+
  */
 
-int motorPins[] = {5, 4, 3, 2};
-int count = 0;
-int count2 = 0;
-int delayTime = 10;
-int val = 0;
+#include <Stepper.h>
+
+const int stepsPerRevolution = 200;  // change this to fit the number of steps per revolution
+// for your motor
+
+
+// initialize the stepper library on pins 8 through 11:
+Stepper myStepper(stepsPerRevolution, 2, 3, 4, 5);
+
+int stepCount = 0;  // number of steps the motor has taken
 
 void setup() {
-  for (count = 0; count < 4; count++) {
-    pinMode(motorPins[count], OUTPUT);
-  }
-}
-
-void moveForward() {
-  if ((count2 == 0) || (count2 == 1)) {
-    count2 = 16;
-  }
-  count2>>=1;
-  for (count = 3; count >= 0; count--) {
-    digitalWrite(motorPins[count], count2>>count&0x01);
-  }
-  delay(delayTime);
-}
-
-void moveBackward() {
-  if ((count2 == 0) || (count2 == 1)) {
-    count2 = 16;
-  }
-  count2>>=1;
-  for (count = 3; count >= 0; count--) {
-    digitalWrite(motorPins[3 - count], count2>>count&0x01);
-  }
-  delay(delayTime);
+  // nothing to do inside the setup
 }
 
 void loop() {
-  val = analogRead(0);
-  if (val > 540) {
-    // move faster the higher the value from the potentiometer
-    delayTime = 2048 - 1024 * val / 512 + 1; 
-    moveForward();
-  } else if (val < 480) {
-    // move faster the lower the value from the potentiometer
-    delayTime = 1024 * val / 512 + 1; 
-    moveBackward();
-  } else {
-    delayTime = 1024;
+  // read the sensor value:
+  int sensorReading = analogRead(A0);
+  // map it to a range from 0 to 100:
+  int motorSpeed = map(sensorReading, 0, 1023, 0, 100);
+  // set the motor speed:
+  if (motorSpeed > 0) {
+    myStepper.setSpeed(motorSpeed);
+    // step 1/100 of a revolution:
+    myStepper.step(stepsPerRevolution / 100);
   }
 }
