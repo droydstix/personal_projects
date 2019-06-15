@@ -1,5 +1,0 @@
-/Users/Guillermo/Desktop/personal_projects/C#/csharotraining/csharotraining/bin/Debug/csharotraining.exe
-/Users/Guillermo/Desktop/personal_projects/C#/csharotraining/csharotraining/bin/Debug/csharotraining.pdb
-/Users/Guillermo/Desktop/personal_projects/C#/csharotraining/csharotraining/obj/x86/Debug/csharotraining.csproj.CoreCompileInputs.cache
-/Users/Guillermo/Desktop/personal_projects/C#/csharotraining/csharotraining/obj/x86/Debug/csharotraining.exe
-/Users/Guillermo/Desktop/personal_projects/C#/csharotraining/csharotraining/obj/x86/Debug/csharotraining.pdb

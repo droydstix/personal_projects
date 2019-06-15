@@ -1,5 +1,0 @@
-/Users/Guillermo/Desktop/personal_projects/C#/csharotraining/Chapter2App/bin/Debug/Chapter2App.exe
-/Users/Guillermo/Desktop/personal_projects/C#/csharotraining/Chapter2App/bin/Debug/Chapter2App.pdb
-/Users/Guillermo/Desktop/personal_projects/C#/csharotraining/Chapter2App/obj/x86/Debug/Chapter2App.csproj.CoreCompileInputs.cache
-/Users/Guillermo/Desktop/personal_projects/C#/csharotraining/Chapter2App/obj/x86/Debug/Chapter2App.exe
-/Users/Guillermo/Desktop/personal_projects/C#/csharotraining/Chapter2App/obj/x86/Debug/Chapter2App.pdb
