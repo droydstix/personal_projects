@@ -13,7 +13,25 @@
 ESP8266WiFiMulti WiFiMulti;
 WebSocketsClient webSocket;
 WiFiClient client;
-int led = 5;
+// Pin Definitions
+
+int unlock = 5; //D1
+
+int lock = 4; //D2
+
+int trunk = 0; //D3
+
+// int led = 2; //D4 might affect performance
+
+int starter = 14; //D5
+
+int panic = 12; //D6
+
+// int led = 13; //D7
+
+int statusled = 15; //D8
+
+
 #define MyApiKey "560e04cb-bdf7-4d80-809f-aa3ed34b86d0" // API Key is displayed on sinric.com dashboard
 #define MySSID "Droydstix 2.4" // only works on 2.4 ghz network 
 #define MyWifiPassword "1csi2012" // password for network
@@ -30,28 +48,31 @@ void turnOn(String deviceId) {
   {
     Serial.print("Turn on device id: ");
     Serial.println(deviceId);
-    digitalWrite(led, HIGH);
-
+    unlockcar();
   }
   else if (deviceId == "5d0435833f488654235a2162") // Lock Button ID
   {
     Serial.print("Turn on device id: ");
     Serial.println(deviceId);
+    lockcar();
   }
   else if (deviceId == "5d0436323f488654235a2164") // Trunk Button ID
   {
     Serial.print("Turn on device id: ");
     Serial.println(deviceId);
+    opentrunk();
   }
   else if (deviceId == "5d0436ca3f488654235a2166") // Starter Button ID
   {
     Serial.print("Turn on device id: ");
     Serial.println(deviceId);
+    startcar();
   }
   else if (deviceId == "5d0436ee3f488654235a2168") // Panic Button ID
   {
     Serial.print("Turn on device id: ");
     Serial.println(deviceId);
+    emergency();
   }
   else {
     Serial.print("Turn on for unknown device id: ");
@@ -64,7 +85,7 @@ void turnOff(String deviceId) {
   {
     Serial.print("Turn off device id: ");
     Serial.println(deviceId);
-    digitalWrite(led, LOW);
+    //    digitalWrite(led, LOW);
 
   }
   else if (deviceId == "5d0435833f488654235a2162") // Lock Button ID
@@ -112,9 +133,6 @@ void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
         // For Switch or Light device types
         // {"deviceId": xxxx, "action": "setPowerState", value: "ON"} // https://developer.amazon.com/docs/device-apis/alexa-powercontroller.html
 
-        // For Light device type
-        // Look at the light example in github
-
         DynamicJsonBuffer jsonBuffer;
         JsonObject& json = jsonBuffer.parseObject((char*)payload);
         String deviceId = json ["deviceId"];
@@ -146,7 +164,18 @@ void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
 
 void setup() {
   Serial.begin(9600);
-  pinMode(led, OUTPUT);
+  pinMode(statusled, OUTPUT);
+  pinMode(unlock, OUTPUT);
+  pinMode(lock, OUTPUT);
+  pinMode(trunk, OUTPUT);
+  pinMode(starter, OUTPUT);
+  pinMode(panic, OUTPUT);
+  digitalWrite(unlock, LOW);
+  digitalWrite(lock, LOW);
+  digitalWrite(trunk, LOW);
+  digitalWrite(starter, LOW);
+  digitalWrite(panic, LOW);
+
 
 
   WiFiMulti.addAP(MySSID, MyWifiPassword);
@@ -158,6 +187,7 @@ void setup() {
   while (WiFiMulti.run() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
+    notconnected();
   }
   if (WiFiMulti.run() == WL_CONNECTED) {
     Serial.println("");
@@ -182,6 +212,7 @@ void loop() {
 
   if (isConnected) {
     uint64_t now = millis();
+    digitalWrite(statusled, HIGH);
 
     // Send heartbeat in order to avoid disconnections during ISP resetting IPs over night. Thanks @MacSass
     if ((now - heartbeatTimestamp) > HEARTBEAT_INTERVAL) {
@@ -190,6 +221,73 @@ void loop() {
     }
   }
 }
+void unlockcar() {
+  digitalWrite(unlock, HIGH);
+  delay(250);
+  digitalWrite(unlock, LOW);
+  delay(250);
+  digitalWrite(unlock, HIGH);
+  delay(250);
+  digitalWrite(unlock, LOW);
+  delay(250);
+}
 
-// If you want a push button: https://github.com/kakopappa/sinric/blob/master/arduino_examples/switch_with_push_button.ino
+void lockcar() {
+  digitalWrite(lock, HIGH);
+  delay(250);
+  digitalWrite(lock, LOW);
+  delay(250);
+  digitalWrite(lock, HIGH);
+  delay(250);
+  digitalWrite(lock, LOW);
+  delay(250);
+}
 
+void opentrunk() {
+  lockcar();
+  digitalWrite(trunk, HIGH);
+  delay(250);
+  digitalWrite(trunk, LOW);
+  delay(250);
+  digitalWrite(trunk, HIGH);
+  delay(250);
+  digitalWrite(trunk, LOW);
+  delay(250);
+}
+
+void startcar() {
+  lockcar();
+  digitalWrite(starter, HIGH);
+  delay(250);
+  digitalWrite(starter, LOW);
+  delay(250);
+  digitalWrite(starter, HIGH);
+  delay(250);
+  digitalWrite(starter, LOW);
+  delay(250);
+}
+
+void emergency() {
+  digitalWrite(panic, HIGH);
+  delay(1000);
+  digitalWrite(panic, LOW);
+  delay(1000);
+}
+
+void notconnected() {
+  digitalWrite(statusled, HIGH);
+  delay(125);
+  digitalWrite(statusled, LOW);
+  delay(125);
+  digitalWrite(statusled, HIGH);
+  delay(125);
+  digitalWrite(statusled, LOW);
+  delay(125);
+  digitalWrite(statusled, HIGH);
+  delay(125);
+  digitalWrite(statusled, LOW);
+  delay(125);
+  digitalWrite(statusled, HIGH);
+  delay(125);
+  digitalWrite(statusled, LOW);
+}
