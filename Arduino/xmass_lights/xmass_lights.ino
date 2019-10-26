@@ -1,5 +1,5 @@
 /*
-  Smart Car
+xmass lights
 */
 //SETUP ACCOUNT @ https://sinric.com/
 
@@ -15,26 +15,26 @@ WebSocketsClient webSocket;
 WiFiClient client;
 // Pin Definitions
 
-int unlock = 5; //D1
+int ls1 = 5; //D1
 
-int lock = 4; //D2
+int ls2 = 4; //D2
 
-int trunk = 0; //D3
+int ls3 = 0; //D3
 
 // int led = 2; //D4 might affect performance
 
-int starter = 14; //D5
+// int starter = 14; //D5
 
-int panic = 12; //D6
+// int panic = 12; //D6
 
 // int led = 13; //D7
 
-int statusled = 15; //D8
+ int statusled = 15; //D8
 
 
-#define MyApiKey "560e04cb-bdf7-4d80-809f-aa3ed34b86d0" // API Key is displayed on sinric.com dashboard
-#define MySSID "Droydstix 2.4" // only works on 2.4 ghz network 
-#define MyWifiPassword "1csi2012" // password for network
+#define MyApiKey "b8aae581-0a71-43a5-bc14-e5f19f553917" // API Key is displayed on sinric.com dashboard
+#define MySSID "xmasslights" // only works on 2.4 ghz network 
+#define MyWifiPassword "xmasslights" // password for network
 #define HEARTBEAT_INTERVAL 300000 // 5 Minutes 
 
 uint64_t heartbeatTimestamp = 0;
@@ -44,35 +44,23 @@ bool isConnected = false;
 // deviceId is the ID assgined to your smart-home-device in sinric.com dashboard. Copy it from dashboard and paste it here
 
 void turnOn(String deviceId) {
-  if (deviceId == "5d04354d3f488654235a215f") // Unlock Button ID
+  if (deviceId == "5daf7898a0866720351e950f") // light show 1 ID
   {
     Serial.print("Turn on device id: ");
     Serial.println(deviceId);
-    unlockcar();
+    LS1();
   }
-  else if (deviceId == "5d0435833f488654235a2162") // Lock Button ID
+  else if (deviceId == "5daf78a7a0866720351e9514") // Light show 2 ID
   {
     Serial.print("Turn on device id: ");
     Serial.println(deviceId);
-    lockcar();
+    LS2();
   }
-  else if (deviceId == "5d0436323f488654235a2164") // Trunk Button ID
+  else if (deviceId == "5daf78b0a0866720351e9519") // Light Show 3 ID
   {
     Serial.print("Turn on device id: ");
     Serial.println(deviceId);
-    opentrunk();
-  }
-  else if (deviceId == "5d0436ca3f488654235a2166") // Starter Button ID
-  {
-    Serial.print("Turn on device id: ");
-    Serial.println(deviceId);
-    startcar();
-  }
-  else if (deviceId == "5d0436ee3f488654235a2168") // Panic Button ID
-  {
-    Serial.print("Turn on device id: ");
-    Serial.println(deviceId);
-    emergency();
+    LS3();
   }
   else {
     Serial.print("Turn on for unknown device id: ");
@@ -81,29 +69,17 @@ void turnOn(String deviceId) {
 }
 
 void turnOff(String deviceId) {
-  if (deviceId == "5d04354d3f488654235a215f") // Unlock Button ID
-  {
-    Serial.print("Turn off device id: ");
-    Serial.println(deviceId);
-    //    digitalWrite(led, LOW);
-
-  }
-  else if (deviceId == "5d0435833f488654235a2162") // Lock Button ID
+  if (deviceId == "5daf7898a0866720351e950f") // Light Show 1 ID
   {
     Serial.print("Turn off device id: ");
     Serial.println(deviceId);
   }
-  else if (deviceId == "5d0436323f488654235a2164") // Trunk Button ID
+  else if (deviceId == "5daf78a7a0866720351e9514") // Light Show 2 ID
   {
     Serial.print("Turn off device id: ");
     Serial.println(deviceId);
   }
-  else if (deviceId == "5d0436ca3f488654235a2166") // Starter Button ID
-  {
-    Serial.print("Turn off device id: ");
-    Serial.println(deviceId);
-  }
-  else if (deviceId == "5d0436ee3f488654235a2168") // Panic Button ID
+  else if (deviceId == "5daf78b0a0866720351e9519") // Light Show 3 ID
   {
     Serial.print("Turn off device id: ");
     Serial.println(deviceId);
@@ -163,20 +139,15 @@ void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
 }
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
+  pinMode(ls1, OUTPUT);
+  pinMode(ls2, OUTPUT);
+  pinMode(ls3, OUTPUT);
   pinMode(statusled, OUTPUT);
-  pinMode(unlock, OUTPUT);
-  pinMode(lock, OUTPUT);
-  pinMode(trunk, OUTPUT);
-  pinMode(starter, OUTPUT);
-  pinMode(panic, OUTPUT);
-  digitalWrite(unlock, LOW);
-  digitalWrite(lock, LOW);
-  digitalWrite(trunk, LOW);
-  digitalWrite(starter, LOW);
-  digitalWrite(panic, LOW);
 
-
+  digitalWrite(ls1, LOW);
+  digitalWrite(ls2, LOW);
+  digitalWrite(ls3, LOW);
 
   WiFiMulti.addAP(MySSID, MyWifiPassword);
   Serial.println();
@@ -221,57 +192,25 @@ void loop() {
     }
   }
 }
-void unlockcar() {
-  digitalWrite(unlock, HIGH);
-  delay(250);
-  digitalWrite(unlock, LOW);
-  delay(250);
-  digitalWrite(unlock, HIGH);
-  delay(250);
-  digitalWrite(unlock, LOW);
-  delay(250);
+
+void LS1()
+{
+  digitalWrite(ls1, HIGH);
+  delay(125); 
+  digitalWrite(ls1, LOW);
+}
+void LS2()
+{
+  digitalWrite(ls2, HIGH);
+  delay(125); 
+  digitalWrite(ls2, LOW);
 }
 
-void lockcar() {
-  digitalWrite(lock, HIGH);
-  delay(250);
-  digitalWrite(lock, LOW);
-  delay(250);
-  digitalWrite(lock, HIGH);
-  delay(250);
-  digitalWrite(lock, LOW);
-  delay(250);
-}
-
-void opentrunk() {
-  lockcar();
-  digitalWrite(trunk, HIGH);
-  delay(250);
-  digitalWrite(trunk, LOW);
-  delay(250);
-  digitalWrite(trunk, HIGH);
-  delay(250);
-  digitalWrite(trunk, LOW);
-  delay(250);
-}
-
-void startcar() {
-  lockcar();
-  digitalWrite(starter, HIGH);
-  delay(250);
-  digitalWrite(starter, LOW);
-  delay(250);
-  digitalWrite(starter, HIGH);
-  delay(250);
-  digitalWrite(starter, LOW);
-  delay(250);
-}
-
-void emergency() {
-  digitalWrite(panic, HIGH);
-  delay(1000);
-  digitalWrite(panic, LOW);
-  delay(1000);
+void LS3()
+{
+  digitalWrite(ls3, HIGH);
+  delay(125); 
+  digitalWrite(ls3, LOW);
 }
 
 void notconnected() {
@@ -291,3 +230,33 @@ void notconnected() {
   delay(125);
   digitalWrite(statusled, LOW);
 }
+
+/*
+ * 
+ * 
+ * 
+ * Instruction & Steps of How to use:
+1. Download the Arduino IDE, the latest version.
+2. Install the IDE.
+3. Set up your Arduino IDE as: Go to File->Preferences and copy the URL below to get the ESP board manager extensions: http://arduino.esp8266.com/stable/package_esp8266com_index.json
+Placing the “http://” before the URL and let the Arduino IDE use it...otherwise it gives you a protocol error.
+4. Go to Tools > Board > Board Manager> Type "esp8266" and download the Community esp8266 and install. 
+5. Set up your chip:
+Tools -> Board -> NodeMCU 1.0 (ESP-12E Module)
+Tools -> Flash Size -> 4M (3M SPIFFS)
+Tools -> CPU Frequency -> 80 Mhz
+Tools -> Upload Speed -> 921600
+Tools-->Port--> (whatever it is)
+6. Download and run the 32 bit flasher exe at Github(Search for nodemcu/nodemcu-flasher/tree/master/ at Github) github.com/nodemcu/nodemcu-flasher/tree/master/Win32/Release
+Or download and run the 64 bit flasher exe at: github.com/nodemcu/nodemcu-flasher/tree/master/Win64/Release
+7. In Arduino IDE, look for the old fashioned Blink program. Load, compile and upload. 
+8. Go to FILE> EXAMPLES> ESP8266> BLINK, it will start blinking. 
+
+Package included: 
+3 x ESP8266 NodeMCU LUA CP2102 WiFi Development Board
+
+
+DRIVERS https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers
+ * 
+ *
+ */
