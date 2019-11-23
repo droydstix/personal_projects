@@ -65,6 +65,7 @@ void turnOn(String deviceId) {
   else {
     Serial.print("Turn on for unknown device id: ");
     Serial.println(deviceId);
+        LS3();
   }
 }
 
