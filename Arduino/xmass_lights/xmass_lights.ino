@@ -21,6 +21,8 @@ int ls2 = 4; //D2
 
 int ls3 = 0; //D3
 
+boolean Active_Show=false;
+
 // int led = 2; //D4 might affect performance
 
 // int starter = 14; //D5
@@ -29,15 +31,21 @@ int ls3 = 0; //D3
 
 // int led = 13; //D7
 
- int statusled = 15; //D8
+int statusled = 15; //D8
+unsigned long time_passed=0;
+unsigned long previousMillis = 0;
+const long interval = 1330000;
 
 
 #define MyApiKey "b8aae581-0a71-43a5-bc14-e5f19f553917" // API Key is displayed on sinric.com dashboard
 #define MySSID "xmasslights" // only works on 2.4 ghz network 
 #define MyWifiPassword "xmasslights" // password for network
 #define HEARTBEAT_INTERVAL 300000 // 5 Minutes 
+//#define FIRST_SHOW
+//#define SECOND_SHOW
 
 uint64_t heartbeatTimestamp = 0;
+
 bool isConnected = false;
 
 
@@ -48,24 +56,30 @@ void turnOn(String deviceId) {
   {
     Serial.print("Turn on device id: ");
     Serial.println(deviceId);
-    LS1();
+    digitalWrite(ls1, HIGH);
+    previousMillis=time_passed;
+    Serial.println(Active_Show);
+    turnOff("5daf78a7a0866720351e9514");
+    Active_Show=true; 
   }
   else if (deviceId == "5daf78a7a0866720351e9514") // Light show 2 ID
   {
     Serial.print("Turn on device id: ");
     Serial.println(deviceId);
-    LS2();
+    digitalWrite(ls2, HIGH);
+    Serial.println(Active_Show);
+    turnOff("5daf7898a0866720351e950f"); 
+    Active_Show=false;
   }
   else if (deviceId == "5daf78b0a0866720351e9519") // Light Show 3 ID
   {
     Serial.print("Turn on device id: ");
     Serial.println(deviceId);
-    LS3();
+    digitalWrite(ls3, HIGH);
   }
   else {
     Serial.print("Turn on for unknown device id: ");
     Serial.println(deviceId);
-        LS3();
   }
 }
 
@@ -74,16 +88,19 @@ void turnOff(String deviceId) {
   {
     Serial.print("Turn off device id: ");
     Serial.println(deviceId);
+    digitalWrite(ls1, LOW);
   }
   else if (deviceId == "5daf78a7a0866720351e9514") // Light Show 2 ID
   {
     Serial.print("Turn off device id: ");
     Serial.println(deviceId);
+    digitalWrite(ls2, LOW);
   }
   else if (deviceId == "5daf78b0a0866720351e9519") // Light Show 3 ID
   {
     Serial.print("Turn off device id: ");
     Serial.println(deviceId);
+    digitalWrite(ls3, LOW);
   }
   else {
     Serial.print("Turn off for unknown device id: ");
@@ -147,7 +164,7 @@ void setup() {
   pinMode(statusled, OUTPUT);
 
   digitalWrite(ls1, LOW);
-  digitalWrite(ls2, LOW);
+  digitalWrite(ls2, HIGH);
   digitalWrite(ls3, LOW);
 
   WiFiMulti.addAP(MySSID, MyWifiPassword);
@@ -166,6 +183,7 @@ void setup() {
     Serial.print("WiFi connected. ");
     Serial.print("IP address: ");
     Serial.println(WiFi.localIP());
+    
   }
 
   // server address, port and URL
@@ -181,38 +199,26 @@ void setup() {
 
 void loop() {
   webSocket.loop();
-
   if (isConnected) {
     uint64_t now = millis();
     digitalWrite(statusled, HIGH);
-
     // Send heartbeat in order to avoid disconnections during ISP resetting IPs over night. Thanks @MacSass
     if ((now - heartbeatTimestamp) > HEARTBEAT_INTERVAL) {
       heartbeatTimestamp = now;
       webSocket.sendTXT("H");
     }
   }
+  time_passed = millis();
+  
+  if(time_passed-previousMillis >= interval && Active_Show)
+  {
+  Serial.println("show ended");  
+  turnOn("5daf78a7a0866720351e9514");     //LIGHT SHOW 2
+  turnOff("5daf7898a0866720351e950f");    //LIGHT SHOW 1 
+  }
+  
 }
 
-void LS1()
-{
-  digitalWrite(ls1, HIGH);
-  delay(125); 
-  digitalWrite(ls1, LOW);
-}
-void LS2()
-{
-  digitalWrite(ls2, HIGH);
-  delay(125); 
-  digitalWrite(ls2, LOW);
-}
-
-void LS3()
-{
-  digitalWrite(ls3, HIGH);
-  delay(125); 
-  digitalWrite(ls3, LOW);
-}
 
 void notconnected() {
   digitalWrite(statusled, HIGH);
