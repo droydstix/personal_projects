@@ -164,7 +164,7 @@ void setup() {
   pinMode(statusled, OUTPUT);
 
   digitalWrite(ls1, LOW);
-  digitalWrite(ls2, HIGH);
+  digitalWrite(ls2, LOW);
   digitalWrite(ls3, LOW);
 
   WiFiMulti.addAP(MySSID, MyWifiPassword);
