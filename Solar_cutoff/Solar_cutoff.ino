@@ -13,11 +13,11 @@ void loop()
   // read the input on analog pin 0:
   sensorValue = analogRead(A0);
   // print out the value you read:
-  Serial.println(sensorValue);
-  if(sensorValue<123){
+  //Serial.println(sensorValue);
+  if(sensorValue<100){
   digitalWrite(RelayControl, LOW);
   }
-  else if(sensorValue>200){
+  else if(sensorValue>228){
   digitalWrite(RelayControl, HIGH);
   }
 }
